@@ -49,5 +49,5 @@ async def suggest(key: str) -> str | None:
     response = await make_request(f"{JIRA_API_BASE}/suggest?key={key}", "GET")
     if not response:
         return "Action Failed"
-    result_str = f"suggestion: {response['results']['suggestion']}, description: {response['results']['description']}"
+    result_str = f"{response['results']['suggestion']}"
     return result_str

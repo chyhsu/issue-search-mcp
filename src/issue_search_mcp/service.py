@@ -1,7 +1,7 @@
 from typing import Any
 import httpx
 import argparse
-from . import JIRA_API_BASE
+from . import JIRA_API_BASE, mcp
 
 
 async def make_request(url: str, method: str) -> dict[str, Any] | None:
@@ -26,5 +26,16 @@ def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="JIRA Issue Search MCP Server")
     parser.add_argument("--url", type=str, default=JIRA_API_BASE,
-                        help=f"Base URL for the weather API (default: {JIRA_API_BASE})")
+                        help=f"Base URL for the JIRA-issue-search MCP server (default: {JIRA_API_BASE})")
     return parser.parse_args()
+
+def server():
+    args = parse_args()
+    print("Hello from JIRA-issue-search MCP server!")
+    
+    # Update the module's JIRA_API_BASE variable
+    JIRA_API_BASE = args.url
+    print(f"Using API URL: {JIRA_API_BASE}")
+    
+    # Run the MCP server
+    mcp.run(transport='stdio')
