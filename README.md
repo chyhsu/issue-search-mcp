@@ -51,33 +51,6 @@ A specialized MCP server for searching and interacting with JIRA issues. This to
    }
    ```
 
-## Usage
-
-### As a Command-Line Tool
-
-After installation, you can run the MCP server:
-
-```bash
-issue-search-mcp [--url JIRA_API_BASE_URL]
-```
-
-
-### As a Python Module
-
-```python
-from issue_search_mcp import query, suggest, sync
-
-# Query JIRA issues
-result = await query("performance issue", is_key=False)  # Natural language query
-result = await query("PROJ-123", is_key=True)  # Issue ID query
-
-# Get suggestions for an issue
-suggestions = await suggest("PROJ-123")
-
-# Synchronize with JIRA server
-sync_result = await sync()
-```
-
 ## Tool Reference
 
 ### `query(query_term: str, is_key: bool) -> str | None`
