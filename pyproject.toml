@@ -1,10 +1,14 @@
 [project]
 name = "issue-search-mcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "This is an internal QNAP MCP server for JIRA issue search. You can use it to search for JIRA issues and get suggestions. 'query' can accept natural-language queries or issue IDs. 'suggest' can accept the issue's ID and will return possible suggestions of the issue. 'sync' synchronizes the JIRA issue search server."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "httpx>=0.28.1",
     "mcp[cli]>=1.6.0",
+    "argparse>=1.2.0",
+    "os>=1.2.0",
+    "json>=1.2.0",
+    "typing>=3.12.0"
 ]
