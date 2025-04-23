@@ -10,7 +10,7 @@ async def make_request(url: str, method: str) -> dict[str, Any] | None:
             if method == "GET":
                 response = await client.get(url, timeout=30.0)
             elif method == "POST":
-                response = await client.post(url, timeout=30.0)
+                response = await client.post(url, timeout=90.0)
             
             response.raise_for_status()
             

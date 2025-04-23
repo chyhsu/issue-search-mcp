@@ -5,7 +5,12 @@ from . import mcp, JIRA_API_BASE
 async def sync() -> str | None:
     """Sync the JIRA issue search MCP server."""
     response = await make_request(f"{JIRA_API_BASE}/sync", "POST")
-    return f"{response}"
+    if not response:
+        return "Action Failed"
+    result_str= f"message: {response['message']}, updated:"
+    for issue in response['updated']:
+        result_str += f" {issue},"
+    return result_str
 
 @mcp.tool()
 async def query(query_term: str, is_key: bool) -> str | None:
@@ -22,10 +27,16 @@ async def query(query_term: str, is_key: bool) -> str | None:
     
     if not response:
         return "Action Failed"
-    
-    result_str="\n---\n".join(f"{issue}" for issue in response['result'])
-   
-    
+
+    items = response['results']
+    formatted = []
+    for issue in items:
+        key = issue.get('key')
+        summary = issue.get('summary')
+        url = issue.get('url')
+        created = issue.get('created')
+        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}")
+    result_str = "\n---\n".join(formatted)
     return result_str
 
 @mcp.tool()
@@ -36,4 +47,7 @@ async def suggest(key: str) -> str | None:
         key: ID of the issue to be suggested 
     """
     response = await make_request(f"{JIRA_API_BASE}/suggest?key={key}", "GET")
-    return f"{response['result']}"
+    if not response:
+        return "Action Failed"
+    result_str = f"suggestion: {response['results']['suggestion']}, description: {response['results']['description']}"
+    return result_str
