@@ -13,6 +13,7 @@ mcp = FastMCP("issue-search")
 
 # Now import the modules that need mcp
 from .service import make_request, parse_args
-from .tool import get_forecast
+from .tool import query, suggest, sync
 
-__all__ = ['make_request', 'get_forecast', 'parse_args', 'mcp', 'JIRA_API_BASE']
+
+__all__ = ['make_request', 'query', 'suggest', 'sync', 'parse_args', 'mcp', 'JIRA_API_BASE']
