@@ -9,7 +9,7 @@ async def get_alerts(state: str) -> str:
         state: Two-letter US state code (e.g. CA, NY)
     """
     url = f"{NWS_API_BASE}/alerts/active/area/{state}"
-    data = await make_request(url)
+    data = await make_request(url, "GET")
 
     if not data or "features" not in data:
         return "Unable to fetch alerts or no alerts found."
@@ -30,14 +30,14 @@ async def get_forecast(latitude: float, longitude: float) -> str:
     """
     # First get the forecast grid endpoint
     points_url = f"{NWS_API_BASE}/points/{latitude},{longitude}"
-    points_data = await make_request(points_url)
+    points_data = await make_request(points_url, "GET")
 
     if not points_data:
         return "Unable to fetch forecast data for this location."
 
     # Get the forecast URL from the points response
     forecast_url = points_data["properties"]["forecast"]
-    forecast_data = await make_request(forecast_url)
+    forecast_data = await make_request(forecast_url, "GET")
 
     if not forecast_data:
         return "Unable to fetch detailed forecast."
@@ -59,26 +59,22 @@ Forecast: {period['detailedForecast']}
 @mcp.tool()
 async def sync() -> str | None:
     """Sync the JIRA issue search MCP server."""
-    response = await make_request(f"{JIRA_API_BASE}/sync")
-    if not response:
-        return "Unable to sync JIRA issue search MCP server."
+    response = await make_request(f"{JIRA_API_BASE}/sync", "POST")
     return f"{response}"
 
 @mcp.tool()
 async def query(query_term: str, is_key: bool) -> str | None:
     """Query the JIRA issue search MCP server."""
     if is_key:
-        response = await make_request(f"{JIRA_API_BASE}/query?key={query_term}")
+        response = await make_request(f"{JIRA_API_BASE}/query?key={query_term}", "GET")
     else:
-        response = await make_request(f"{JIRA_API_BASE}/query?q={query_term}")
-    if not response:
-        return "Unable to query JIRA issue search MCP server."
+        response = await make_request(f"{JIRA_API_BASE}/query?q={query_term}", "GET")
+
     return f"{response}"
 
 @mcp.tool()
 async def suggest(key: str) -> str | None:
     """Suggest possible queries for the JIRA issue search MCP server."""
-    response = await make_request(f"{JIRA_API_BASE}/suggest?key={key}")
-    if not response:
-        return "Unable to suggest possible queries for the JIRA issue search MCP server."
+    response = await make_request(f"{JIRA_API_BASE}/suggest?key={key}", "GET")
+ 
     return f"{response}"

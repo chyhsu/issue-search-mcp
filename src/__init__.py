@@ -5,7 +5,7 @@ JIRA Issue Search MCP Server package.
 from mcp.server.fastmcp import FastMCP
 
 # Define constants first
-JIRA_API_BASE = "https://your-jira-instance.atlassian.net/rest/api/2"
+JIRA_API_BASE = "http://127.0.0.1:6060"
 USER_AGENT = "jira-issue-search/1.0"
 NWS_API_BASE = "https://api.weather.gov"
 
