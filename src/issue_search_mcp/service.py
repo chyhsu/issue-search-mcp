@@ -1,16 +1,17 @@
 from typing import Any
 import httpx
 import argparse
-from . import JIRA_API_BASE, mcp
+from . import mcp,TOKEN
 
 
 async def make_request(url: str, method: str) -> dict[str, Any] | None:
     async with httpx.AsyncClient() as client:
+        headers = {"Authorization": f"Bearer {TOKEN}"}
         try:
             if method == "GET":
-                response = await client.get(url, timeout=30.0)
+                response = await client.get(url, timeout=30.0, headers=headers)
             elif method == "POST":
-                response = await client.post(url, timeout=90.0)
+                response = await client.post(url, timeout=90.0, headers=headers)
             
             response.raise_for_status()
             
@@ -25,8 +26,9 @@ async def make_request(url: str, method: str) -> dict[str, Any] | None:
 def parse_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="JIRA Issue Search MCP Server")
-    parser.add_argument("--url", type=str, default=JIRA_API_BASE,
-                        help=f"Base URL for the JIRA-issue-search MCP server (default: {JIRA_API_BASE})")
+    parser.add_argument("--url", type=str, 
+                        help=f"Base URL for the JIRA-issue-search MCP server")
+    parser.add_argument("--token", type=str, help=f"Token for the JIRA-issue-search MCP server")
     return parser.parse_args()
 
 def server():
@@ -35,6 +37,10 @@ def server():
     
     # Update the module's JIRA_API_BASE variable
     JIRA_API_BASE = args.url
+
+    # Update the module's TOKEN variable
+    TOKEN = args.token
+    
     print(f"Using API URL: {JIRA_API_BASE}")
     
     # Run the MCP server

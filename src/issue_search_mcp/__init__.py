@@ -6,7 +6,7 @@ from mcp.server.fastmcp import FastMCP
 
 # Define constants first
 JIRA_API_BASE = "http://127.0.0.1:6060"
-
+TOKEN = ""
 
 # Create the FastMCP instance
 mcp = FastMCP("issue-search")
