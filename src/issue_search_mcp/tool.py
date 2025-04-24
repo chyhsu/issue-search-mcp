@@ -8,10 +8,9 @@ async def sync() -> str | None:
 
     if not response:
         return "Action Failed"
-    if response['status']==401:
-        return response['message']
-        
-
+    if response.get('status') == 401:
+        return response.get('message', 'Unauthorized')
+    
     result_str= f"message: {response['message']}, updated:"
     for issue in response['updated']:
         result_str += f" {issue},"
@@ -32,9 +31,11 @@ async def query(query_term: str, is_key: bool) -> str | None:
     
     if not response:
         return "Action Failed"
-    if response['status']==401:
-        return response['message']
-
+    if response.get('status') == 401:
+        return response.get('message', 'Unauthorized')
+    if response.get('message') == "No Result":
+        return "Issue not found"
+    
     items = response['results']
     formatted = []
     for issue in items:
@@ -56,7 +57,9 @@ async def suggest(key: str) -> str | None:
     response = await make_request(f"suggest?key={key}", "GET")
     if not response:
         return "Action Failed"
-    if response['status']==401:
-        return response['message']
+    if response.get('status') == 401:
+        return response.get('message', 'Unauthorized')
+    if response.get('message') == "No Result":
+        return "Issue not found"
     result_str = f"{response['results']['suggestion']}"
     return result_str
