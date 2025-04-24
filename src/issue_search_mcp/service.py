@@ -1,47 +1,51 @@
-from typing import Any
-import httpx
 import argparse
-from . import mcp,TOKEN
+import httpx
+from typing import Any
+from . import mcp
+from mcp.server.fastmcp import FastMCP
 
+
+
+# Define constants first
+JIRA_API_BASE = None
+TOKEN = None
 
 async def make_request(url: str, method: str) -> dict[str, Any] | None:
     async with httpx.AsyncClient() as client:
-        headers = {"Authorization": f"Bearer {TOKEN}"}
-        try:
-            if method == "GET":
-                response = await client.get(url, timeout=30.0, headers=headers)
-            elif method == "POST":
-                response = await client.post(url, timeout=90.0, headers=headers)
-            
-            response.raise_for_status()
-            
-            return response.json()
-        except httpx.HTTPStatusError:
-            return None
-        except httpx.RequestError:
-            return None
-        except Exception:
-            return None
+        headers = {"Authorization": f"Bearer {TOKEN}"} if TOKEN else {}
 
-def parse_args():
-    """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description="JIRA Issue Search MCP Server")
-    parser.add_argument("--url", type=str, 
-                        help=f"Base URL for the JIRA-issue-search MCP server")
-    parser.add_argument("--token", type=str, help=f"Token for the JIRA-issue-search MCP server")
-    return parser.parse_args()
+        if method == "GET":
+            resp = await client.get(f"{JIRA_API_BASE}/{url}", timeout=30.0, headers=headers)
+        elif method == "POST":
+            resp = await client.post(f"{JIRA_API_BASE}/{url}", timeout=90.0, headers=headers)
+        else:                         # guard against typos
+            raise ValueError(f"Unsupported method {method}")
 
-def server():
+        resp.raise_for_status()
+        return resp.json()
+
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="JIRA Issue Search MCP Server")
+    p.add_argument("--url", required=True,  type=str,
+                   help="Base URL for the JIRA-issue-search MCP server")
+    p.add_argument("--token", type=str,
+                   help="Bearer token for the JIRA-issue-search MCP server")
+    return p.parse_args()
+
+def server() -> None:
+
+
     args = parse_args()
     print("Hello from JIRA-issue-search MCP server!")
-    
-    # Update the module's JIRA_API_BASE variable
-    JIRA_API_BASE = args.url
 
-    # Update the module's TOKEN variable
-    TOKEN = args.token
-    
+    # tell Python we want to *update* the module-level vars, not shadow them
+    global TOKEN, JIRA_API_BASE
+    JIRA_API_BASE = args.url
+    TOKEN         = args.token
+
     print(f"Using API URL: {JIRA_API_BASE}")
-    
-    # Run the MCP server
-    mcp.run(transport='stdio')
+    print(f"Using Token  : {TOKEN or '<none>'}")
+
+    mcp.run(transport="stdio")
+
+

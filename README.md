@@ -44,7 +44,9 @@ A specialized MCP server for searching and interacting with JIRA issues. This to
          "command": "issue-search-mcp",
          "args": [
            "--url",
-           "<JIRA_API_BASE_URL>"
+           "<JIRA_API_BASE_URL>",
+           "--token",
+           "<YOUR_USER_ACCESS_TOKEN>"
          ]
        }
      }
@@ -83,6 +85,14 @@ The default JIRA API base URL is `http://127.0.0.1:6060`. You can change this by
 1. Using the `--url` command-line parameter
 2. Modifying the `JIRA_API_BASE` constant in the `__init__.py` file
 
+### Authentication
+
+This MCP server requires authentication with the JIRA-issue-search API using a bearer token:
+
+1. Provide your user access token using the `--token` command-line parameter
+2. The token will be included in API requests as a bearer token in the Authorization header
+
+
 ## Development
 
 ### Project Structure
@@ -106,5 +116,3 @@ issue-search-mcp/
 - `argparse`: Command-line argument parsing
 - `typing`: Type annotations
 - `json5`: JSON parsing
-
-

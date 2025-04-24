@@ -1,12 +1,17 @@
 from .service import make_request
-from . import mcp, JIRA_API_BASE
+from . import mcp
 
 @mcp.tool()
 async def sync() -> str | None:
     """Sync the JIRA issue search MCP server."""
-    response = await make_request(f"{JIRA_API_BASE}/sync", "POST")
+    response = await make_request("sync", "POST")
+
     if not response:
         return "Action Failed"
+    if response['status']==401:
+        return response['message']
+        
+
     result_str= f"message: {response['message']}, updated:"
     for issue in response['updated']:
         result_str += f" {issue},"
@@ -21,12 +26,14 @@ async def query(query_term: str, is_key: bool) -> str | None:
         is_key: Whether the query term is an issue ID
     """
     if is_key:
-        response = await make_request(f"{JIRA_API_BASE}/query?key={query_term}", "GET")
+        response = await make_request(f"query?key={query_term}", "GET")
     else:
-        response = await make_request(f"{JIRA_API_BASE}/query?q={query_term}", "GET")
+        response = await make_request(f"query?q={query_term}", "GET")
     
     if not response:
         return "Action Failed"
+    if response['status']==401:
+        return response['message']
 
     items = response['results']
     formatted = []
@@ -46,8 +53,10 @@ async def suggest(key: str) -> str | None:
     Args:
         key: ID of the issue to be suggested 
     """
-    response = await make_request(f"{JIRA_API_BASE}/suggest?key={key}", "GET")
+    response = await make_request(f"suggest?key={key}", "GET")
     if not response:
         return "Action Failed"
+    if response['status']==401:
+        return response['message']
     result_str = f"{response['results']['suggestion']}"
     return result_str
