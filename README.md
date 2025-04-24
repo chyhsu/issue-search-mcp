@@ -80,8 +80,6 @@ Synchronize with the JIRA issue search server.
 
 ## Configuration
 
-The default JIRA API base URL is `http://127.0.0.1:6060`. You can change this by:
-
 1. Using the `--url` command-line parameter
 2. Modifying the `JIRA_API_BASE` constant in the `__init__.py` file
 
