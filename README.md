@@ -44,7 +44,7 @@ A specialized MCP server for searching and interacting with JIRA issues. This to
          "command": "issue-search-mcp",
          "args": [
            "--url",
-           "<JIRA_API_BASE_URL>",
+           "https://jira-issue-search.dev.myqnapcloud.io/",
            "--token",
            "<YOUR_USER_ACCESS_TOKEN>"
          ]
@@ -52,6 +52,16 @@ A specialized MCP server for searching and interacting with JIRA issues. This to
      }
    }
    ```
+## How to use ##
+
+You can use natural language to command the LLM model to utilize the tools.
+
+- Examples:
+  - "Can you find the issue with ID PROJ-123?"
+  - "Search for issues with the keyword 'ABCDE'?"
+  - "Sync the Jira issue search server before querying."
+  - "Get suggestions for the issue with ID PROJ-123?"
+  - "Search for related issues for PROJ-123?"
 
 ## Tool Reference
 
