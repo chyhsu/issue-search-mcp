@@ -43,7 +43,8 @@ async def query(query_term: str, is_key: bool) -> str | None:
         summary = issue.get('summary')
         url = issue.get('url')
         created = issue.get('created')
-        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}")
+        assignee = issue.get('assignee')
+        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}  assignee: {assignee}")
     result_str = "\n---\n".join(formatted)
     return result_str
 
@@ -62,4 +63,31 @@ async def suggest(key: str) -> str | None:
     if response.get('message') == "No Result":
         return "Issue not found"
     result_str = f"{response['results']['suggestion']}"
+    return result_str
+
+@mcp.tool()
+async def get_issues(assignee: str, created_after: str) -> str | None:
+    """Get issues from the JIRA issue search MCP server.
+    
+    Args:
+        assignee: Assignee of the issue, for example "jasoncyhsu@qnap.com"
+        created_after: Created after date, for example "2025-04-01T15:19:03.000+0800"
+    """
+    response = await make_request(f"get_issues?assignee={assignee}&created_after={created_after}", "GET")
+    if not response:
+        return "Action Failed"
+    if response.get('status') == 401:
+        return response.get('message', 'Unauthorized')
+    if response.get('message') == "No Result":
+        return "No issues found"
+    items = response['results']
+    formatted = []
+    for issue in items:
+        key = issue.get('key')
+        summary = issue.get('summary')
+        url = issue.get('url')
+        created = issue.get('created')
+        assignee = issue.get('assignee')
+        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}  assignee: {assignee}")
+    result_str = "\n---\n".join(formatted)
     return result_str
