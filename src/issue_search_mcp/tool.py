@@ -72,10 +72,10 @@ async def issues(created_after: str, assignee: str) -> str | None:
     """Get issues from the JIRA issue search MCP server.
     
     Args:
-        assignee: Email of the Assignee of the issue. This parameter  could be as 'assignee = None', then it will use the default email after "--email".
+        assignee: Email of the Assignee of the issue. This parameter could be None, then it will use the default email after "--email". For example, "assignee = 'None'" or "assignee = 'abcdef@qnap.com'".
         created_after: Created after date, for example "2025-04-01T15:19:03.000+0800"
     """
-    if not assignee:
+    if assignee=="None":
         assignee = EMAIL
 
     response = await make_request(f"get_issues?assignee={assignee}&created_after={created_after}", "GET")
