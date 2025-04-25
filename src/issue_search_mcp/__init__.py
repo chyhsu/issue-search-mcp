@@ -13,4 +13,4 @@ from .service import make_request, parse_args, server
 from .tool import query, suggest, sync
 
 
-__all__ = ['make_request', 'query', 'suggest', 'sync', 'parse_args', 'mcp', 'server']
+__all__ = ['make_request', 'query', 'suggest', 'sync', 'parse_args', 'mcp', 'server','EMAIL']

@@ -88,10 +88,20 @@ Synchronize with the JIRA issue search server.
 
 - **Returns**: Status message including updated issues or "Action Failed" if the request fails
 
+### `get_issues(assignee: str, created_after: str) -> str | None`
+
+Get issues from the JIRA issue search server.
+
+- **Parameters**:
+  - `assignee`: Assignee of the issue, for example "jasoncyhsu@qnap.com"
+  - `created_after`: Created after date, for example "2025-04-01T15:19:03.000+0800"
+- **Returns**: Formatted string containing issue details or "Action Failed" if the request fails
+
 ## Configuration
 
 1. Using the `--url` command-line parameter
 2. Modifying the `JIRA_API_BASE` constant in the `__init__.py` file
+
 
 ### Authentication
 

@@ -66,13 +66,16 @@ async def suggest(key: str) -> str | None:
     return result_str
 
 @mcp.tool()
-async def get_issues(assignee: str, created_after: str) -> str | None:
+async def issues(created_after: str, assignee: str) -> str | None:
     """Get issues from the JIRA issue search MCP server.
     
     Args:
-        assignee: Assignee of the issue, for example "jasoncyhsu@qnap.com"
+        assignee: Assignee of the issue, could be None,default is the email after "--email", for example "jasoncyhsu@qnap.com"
         created_after: Created after date, for example "2025-04-01T15:19:03.000+0800"
     """
+    if not assignee:
+        assignee = EMAIL
+
     response = await make_request(f"get_issues?assignee={assignee}&created_after={created_after}", "GET")
     if not response:
         return "Action Failed"
