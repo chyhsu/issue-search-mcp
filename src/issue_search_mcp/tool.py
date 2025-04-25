@@ -76,7 +76,7 @@ async def issues(created_after: str, assignee: str) -> str | None:
     if not assignee:
         assignee = EMAIL
 
-    response = await make_request(f"get_issues?assignee={assignee}&created_after={created_after}", "GET")
+    response = await make_request(f"get_issues?assignee={assignee}&created_at={created_after}", "GET")
     if not response:
         return "Action Failed"
     if response.get('status') == 401:
