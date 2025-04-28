@@ -2,7 +2,6 @@ import argparse
 import httpx
 from typing import Any
 from . import mcp
-from mcp.server.fastmcp import FastMCP
 
 # Define constants first
 JIRA_API_BASE = None

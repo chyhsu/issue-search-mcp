@@ -1,10 +1,10 @@
-from .service import make_request
+import issue_search_mcp.service as srv
 from . import mcp
 
 @mcp.tool()
 async def sync() -> str | None:
     """Sync the JIRA issue search MCP server."""
-    response = await make_request("sync", "POST")
+    response = await srv.make_request("sync", "POST")
 
     if not response:
         return "Action Failed"
@@ -25,9 +25,9 @@ async def query(query_term: str, is_key: bool) -> str | None:
         is_key: Whether the query term is an issue ID
     """
     if is_key:
-        response = await make_request(f"query?key={query_term}", "GET")
+        response = await srv.make_request(f"query?key={query_term}", "GET")
     else:
-        response = await make_request(f"query?q={query_term}", "GET")
+        response = await srv.make_request(f"query?q={query_term}", "GET")
     
     if not response:
         return "Action Failed"
@@ -57,7 +57,7 @@ async def suggest(key: str) -> str | None:
     Args:
         key: ID of the issue to be suggested 
     """
-    response = await make_request(f"suggest?key={key}", "GET")
+    response = await srv.make_request(f"suggest?key={key}", "GET")
     if not response:
         return "Action Failed"
     if response.get('status') == 401:
@@ -76,9 +76,9 @@ async def issues(created_after: str, assignee: str) -> str | None:
         created_after: Created after date, for example "2025-04-01T15:19:03.000+0800"
     """
     if assignee=="None":
-        assignee = EMAIL
+        assignee = srv.EMAIL
 
-    response = await make_request(f"get_issues?assignee={assignee}&created_after={created_after}", "GET")
+    response = await srv.make_request(f"get_issues?assignee={assignee}&created_after={created_after}", "GET")
     if not response:
         return "Action Failed"
     if response.get('status') == 401:
