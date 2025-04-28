@@ -46,7 +46,9 @@ A specialized MCP server for searching and interacting with JIRA issues. This to
            "--url",
            "https://jira-issue-search.dev.myqnapcloud.io/",
            "--token",
-           "<YOUR_USER_ACCESS_TOKEN>"
+           "<YOUR_USER_ACCESS_TOKEN>",
+           "--email",
+           "<YOUR_EMAIL>"
          ]
        }
      }
@@ -62,6 +64,7 @@ You can use natural language to command the LLM model to utilize the tools.
   - "Sync the Jira issue search server before querying."
   - "Get suggestions for the issue with ID PROJ-123?"
   - "Search for related issues for PROJ-123?"
+  - "Search my issues created within last week"
 
 ## Tool Reference
 
@@ -99,9 +102,9 @@ Get issues from the JIRA issue search server.
 
 ## Configuration
 
-1. Using the `--url` command-line parameter
-2. Modifying the `JIRA_API_BASE` constant in the `__init__.py` file
-
+1. "--url" : for the base URL of the JIRA issue search server
+2. "--token" : for the bearer token of the JIRA issue search server
+3. "--email" : for the email of the user of the JIRA issue search server
 
 ### Authentication
 
