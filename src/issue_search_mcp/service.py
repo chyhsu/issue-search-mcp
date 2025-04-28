@@ -15,7 +15,7 @@ async def make_request(url: str, method: str) -> dict[str, Any] | None:
         if method == "GET":
             resp = await client.get(f"{JIRA_API_BASE}/{url}", timeout=30.0, headers=headers)
         elif method == "POST":
-            resp = await client.post(f"{JIRA_API_BASE}/{url}", timeout=90.0, headers=headers)
+            resp = await client.post(f"{JIRA_API_BASE}/{url}", timeout=150.0, headers=headers)
         else:                         # guard against typos
             raise ValueError(f"Unsupported method {method}")
 
