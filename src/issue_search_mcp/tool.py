@@ -47,7 +47,8 @@ async def query(query_term: str, is_key: bool) -> str | None:
         description = issue.get('description')
         status = issue.get('status')
         assignee = issue.get('assignee')
-        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}  issue_type: {issue_type}  description: {description}  status: {status}  assignee: {assignee}")
+        comment = issue.get('comment')
+        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}  issue_type: {issue_type}  description: {description}  status: {status}  assignee: {assignee}  comment: {comment}")
     result_str = "\n---\n".join(formatted)
     return result_str
 
@@ -97,6 +98,7 @@ async def issues(created_after: str, assignee: str) -> str | None:
         description = issue.get('description')
         status = issue.get('status')
         assignee = issue.get('assignee')
-        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}  issue_type: {issue_type}  description: {description}  status: {status}  assignee: {assignee}")
+        comment = issue.get('comment')
+        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}  issue_type: {issue_type}  description: {description}  status: {status}  assignee: {assignee}  comment: {comment}")
     result_str = "\n---\n".join(formatted)
     return result_str
