@@ -39,16 +39,7 @@ async def query(query_term: str, is_key: bool) -> str | None:
     items = response['results']
     formatted = []
     for issue in items:
-        key = issue.get('key')
-        summary = issue.get('summary')
-        url = issue.get('url')
-        created = issue.get('created')
-        issue_type = issue.get('issuetype')
-        description = issue.get('description')
-        status = issue.get('status')
-        assignee = issue.get('assignee')
-        comment = issue.get('comment')
-        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}  issue_type: {issue_type}  description: {description}  status: {status}  assignee: {assignee}  comment: {comment}")
+        formatted.append(srv.assign_fields(issue))
     result_str = "\n---\n".join(formatted)
     return result_str
 
@@ -90,15 +81,6 @@ async def issues(created_after: str, assignee: str) -> str | None:
     items = response['results']
     formatted = []
     for issue in items:
-        key = issue.get('key')
-        summary = issue.get('summary')
-        url = issue.get('url')
-        created = issue.get('created')
-        issue_type = issue.get('issuetype')
-        description = issue.get('description')
-        status = issue.get('status')
-        assignee = issue.get('assignee')
-        comment = issue.get('comment')
-        formatted.append(f"key: {key}  summary: {summary}  url: {url}  created_at: {created}  issue_type: {issue_type}  description: {description}  status: {status}  assignee: {assignee}  comment: {comment}")
+        formatted.append(srv.assign_fields(issue))
     result_str = "\n---\n".join(formatted)
     return result_str

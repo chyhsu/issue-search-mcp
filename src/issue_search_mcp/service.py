@@ -50,3 +50,18 @@ def server() -> None:
     mcp.run(transport="stdio")
 
 
+def assign_fields(issue)->str:
+
+
+    key = issue.get('key')
+    summary = issue.get('summary')
+    url = issue.get('url')
+    created = issue.get('created')
+    issue_type = issue.get('issuetype')
+    description = issue.get('description')
+    status = issue.get('status')
+    assignee = issue.get('assignee')
+    comment = issue.get('comment')
+
+    return f"key: {key}  summary: {summary}  url: {url}  created_at: {created}  issue_type: {issue_type}  description: {description}  status: {status}  assignee: {assignee}  comment: {comment}"
+
