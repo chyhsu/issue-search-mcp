@@ -18,7 +18,7 @@ async def sync() -> str | None:
 
 @mcp.tool()
 async def query(query_term: str, is_key: bool) -> str | None:
-    """Query the JIRA issue search MCP server.
+    """Query the JIRA issues from server. You can either query term or issue ID to search what issues you want. For query term, it could be a description of the issue or a key word. For issue ID, it is the issue ID which should match the ID of issue you want to search exactly.  
     
     Args:
         query_term: The query term to search for which can be an issue ID or a natural language query
@@ -45,7 +45,7 @@ async def query(query_term: str, is_key: bool) -> str | None:
 
 @mcp.tool()
 async def suggest(key: str) -> str | None:
-    """Suggest possible queries for the JIRA issue search MCP server.
+    """Using issue ID to get suggestion for the JIRA issue.
     
     Args:
         key: ID of the issue to be suggested 
@@ -62,7 +62,7 @@ async def suggest(key: str) -> str | None:
 
 @mcp.tool()
 async def issues(created_after: str, assignee: str) -> str | None:
-    """Get issues from the JIRA issue search MCP server.
+    """Get issues by two factors, asignee and created after date. You can consider both factors or either one of them for getting issues of a specific person created after a specific date. If you want to get issues of the person using the mcp right now, you can just use "assignee = 'None'" for assignee, because it will use the default email after "--email".
     
     Args:
         assignee: Email of the Assignee of the issue. This parameter could be None, then it will use the default email after "--email". For example, "assignee = 'None'" or "assignee = 'abcdef@qnap.com'".
