@@ -62,11 +62,11 @@ async def suggest(key: str) -> str | None:
 
 @mcp.tool()
 async def issues(created_after: str, assignee: str) -> str | None:
-    """Get issues by two factors, asignee and created after date. You can consider both factors or either one of them for getting issues of a specific person created after a specific date. If you want to get issues of the person using the mcp right now, you can just use "assignee = 'None'" for assignee, because it will use the default email after "--email".
+    """Get issues by two factors, asignee and created after date. You can consider both factors or either one of them for getting issues of a specific person created after a specific date. If you want to get issues of the person using the mcp right now, you can just use "assignee = 'None'" for assignee, because it will use the default email after "--email". But the created_after is required, for example "2024-04-01T15:19:03.000+0800".
     
     Args:
         assignee: Email of the Assignee of the issue. This parameter could be None, then it will use the default email after "--email". For example, "assignee = 'None'" or "assignee = 'abcdef@qnap.com'".
-        created_after: Created after date, for example "2025-04-01T15:19:03.000+0800"
+        created_after: Created after date, for example "2024-04-01T15:19:03.000+0800"
     """
     if assignee=="None":
         assignee = srv.EMAIL
