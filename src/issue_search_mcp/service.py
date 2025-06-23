@@ -35,18 +35,12 @@ def parse_args() -> argparse.Namespace:
 def server() -> None:
 
     args = parse_args()
-    print("Hello from JIRA-issue-search MCP server!")
 
     # tell Python we want to *update* the module-level vars, not shadow them
     global TOKEN, JIRA_API_BASE, EMAIL
     JIRA_API_BASE = args.url
     TOKEN         = args.token
     EMAIL         = args.email
-
-    print(f"Using API URL: {JIRA_API_BASE}")
-    print(f"Using Token  : {TOKEN or '<none>'}")
-    print(f"Using Email  : {EMAIL or '<none>'}")
-
     mcp.run(transport="stdio")
 
 
