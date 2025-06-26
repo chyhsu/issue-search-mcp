@@ -1,118 +1,109 @@
 # JIRA Issue Search MCP Server
 
-A specialized MCP server for searching and interacting with JIRA issues. This tool allows you to search for JIRA issues using natural language queries or issue IDs, get suggestions based on issue IDs, and synchronize with the JIRA issue search server.
+A specialized MCP server for searching and interacting with JIRA issues. This tool allows you to search for JIRA issues using natural language queries or issue IDs, get suggestions based on issue IDs, and retrieve issues based on specific criteria.
 
 ## Tools
 
-- **Query**: Search for JIRA issues using either:
-  - Natural language queries
-  - Specific issue IDs
-- **Suggest**: Get suggestions based on a specific issue ID
-- **Sync**: Synchronize the local database with the JIRA issue search server
+- **`query`**: Search for JIRA issues using natural language queries or a specific issue ID.
+- **`suggest`**: Get suggestions for related issues based on a specific issue ID.
+- **`issues`**: Retrieve issues filtered by assignee and creation date.
 
 ## Installation
 
 ### Prerequisites
 
 - Python 3.12 or higher
-- A running JIRA issue search server 
+- A running JIRA issue search server
 
 ### Install from Source
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd issue-search-mcp
-   ```
+1.  Clone the repository:
+    ```bash
+    git clone <repository-url>
+    cd issue-search-mcp
+    ```
 
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
+2.  Create and activate a virtual environment:
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+    ```
 
-3. Install the package:
-   ```bash
-   pip install -e .
-   ```
+3.  Install the package:
+    ```bash
+    pip install -e .
+    ```
 
-4. Put the below snippet in the model's mcp config:
-   ```json
-   {
-     "mcpServers": {
-       "jira-issue-search": {
-         "command": "issue-search-mcp",
-         "args": [
-           "--url",
-           "https://jira-issue-search.dev.myqnapcloud.io/",
-           "--token",
-           "<YOUR_USER_ACCESS_TOKEN>",
-           "--email",
-           "<YOUR_EMAIL>"
-         ]
-       }
-     }
-   }
-   ```
-## How to use ##
+4.  Put the below snippet in the model's mcp config:
+    ```json
+    {
+      "mcpServers": {
+        "jira-issue-search": {
+          "command": "issue-search-mcp",
+          "args": [
+            "--url",
+            "https://jira-issue-search.dev.myqnapcloud.io/",
+            "--token",
+            "<YOUR_USER_ACCESS_TOKEN>",
+            "--email",
+            "<YOUR_EMAIL>"
+          ]
+        }
+      }
+    }
+    ```
+
+## How to Use
 
 You can use natural language to command the LLM model to utilize the tools.
 
-- Examples:
-  - "Can you find the issue with ID PROJ-123?"
-  - "Search for issues with the keyword 'ABCDE'?"
-  - "Sync the Jira issue search server before querying."
-  - "Get suggestions for the issue with ID PROJ-123?"
-  - "Search for related issues for PROJ-123?"
-  - "Search my issues created within last week"
+- **Query Examples:**
+  - `"Can you find the issue with ID PROJ-123?"`
+  - `"Search for issues with the query term 'login button bug'."`
 
+- **Suggest Examples:**
+  - `"Get suggestions for the issue with ID PROJ-123?"`
+
+- **Issues Examples:**
+  - `"Search my issues created within the last week."`
+  - `"Get issues assigned to 'example@user.com' created after 2024-09-01."`
 ## Tool Reference
 
 ### `query(query_term: str, is_key: bool) -> str | None`
 
-Search for JIRA issues.
+Search for JIRA issues. You can query by a natural language term or a specific issue ID.
 
 - **Parameters**:
-  - `query_term`: The search term (natural language query or issue ID)
-  - `is_key`: Set to `True` if `query_term` is an issue ID, `False` for natural language queries
-- **Returns**: Formatted string containing issue details or "Action Failed" if the request fails
+  - `query_term`: The search term (natural language query or issue ID).
+  - `is_key`: Set to `True` if `query_term` is an issue ID, `False` for natural language queries.
+- **Returns**: A formatted string containing issue details or a failure message.
 
 ### `suggest(key: str) -> str | None`
 
 Get suggestions based on a specific issue ID.
 
 - **Parameters**:
-  - `key`: The JIRA issue ID (e.g., "PROJ-123")
-- **Returns**: Suggestion string or "Action Failed" if the request fails
+  - `key`: The JIRA issue ID (e.g., "PROJ-123").
+- **Returns**: A suggestion string or a failure message.
 
-### `sync() -> str | None`
+### `issues(assignee: str, created_after: str) -> str | None`
 
-Synchronize with the JIRA issue search server.
-
-- **Returns**: Status message including updated issues or "Action Failed" if the request fails
-
-### `get_issues(assignee: str, created_after: str) -> str | None`
-
-Get issues from the JIRA issue search server.
+Get issues filtered by assignee and creation date.
 
 - **Parameters**:
-  - `assignee`: Assignee of the issue, for example "jasoncyhsu@qnap.com"
-  - `created_after`: Created after date, for example "2025-04-01T15:19:03.000+0800"
-- **Returns**: Formatted string containing issue details or "Action Failed" if the request fails
+  - `assignee`: The email of the assignee. If set to `'None'`, it defaults to the email provided in the startup arguments (`--email`).
+  - `created_after`: The start date for issue creation (e.g., `"2024-09-01T00:00:00.000+0800"`). Note: This tool only supports `created_after` (not `created_before`) and only retrieves issues created after 2024-09-01.
+- **Returns**: A formatted string containing issue details or a failure message.
 
 ## Configuration
 
-1. "--url" : for the base URL of the JIRA issue search server
-2. "--token" : for the bearer token of the JIRA issue search server
-3. "--email" : for the email of the user of the JIRA issue search server
+-   `--url`: The base URL of the JIRA issue search server.
+-   `--token`: The bearer token for authenticating with the JIRA issue search server.
+-   `--email`: The user's email, used as the default assignee for the `issues` tool.
 
 ### Authentication
 
-This MCP server requires authentication with the JIRA-issue-search API using a bearer token:
-
-1. Provide your user access token using the `--token` command-line parameter
-2. The token will be included in API requests as a bearer token in the Authorization header
-
+This MCP server requires authentication with the JIRA issue search API using a bearer token. Provide your user access token via the `--token` command-line parameter.
 
 ## Development
 
@@ -122,18 +113,10 @@ This MCP server requires authentication with the JIRA-issue-search API using a b
 issue-search-mcp/
 ├── src/
 │   └── issue_search_mcp/
-│       ├── __init__.py      # Package initialization and constants
+│       ├── __init__.py      # Package initialization
 │       ├── service.py       # Core service functionality and HTTP requests
-│       └── tool.py          # MCP tool implementations (query, suggest, sync)
-├── main.py                  # Entry point for direct execution
+│       └── tool.py          # MCP tool implementations
+├── main.py                  # CLI entry point
 ├── pyproject.toml           # Project metadata and dependencies
 └── README.md                # This documentation
 ```
-
-### Dependencies
-
-- `httpx`: For asynchronous HTTP requests
-- `mcp[cli]`: MCP server framework
-- `argparse`: Command-line argument parsing
-- `typing`: Type annotations
-- `json5`: JSON parsing

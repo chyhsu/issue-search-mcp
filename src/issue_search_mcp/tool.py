@@ -1,20 +1,20 @@
 import issue_search_mcp.service as srv
 from . import mcp
 
-@mcp.tool()
-async def sync() -> str | None:
-    """Sync the JIRA issue search MCP server."""
-    response = await srv.make_request("sync", "POST")
+# @mcp.tool()
+# async def sync() -> str | None:
+#     """Sync the JIRA issue search MCP server."""
+#     response = await srv.make_request("sync", "POST")
 
-    if not response:
-        return "Action Failed"
-    if response.get('status') == 401:
-        return response.get('message', 'Unauthorized')
+#     if not response:
+#         return "Action Failed"
+#     if response.get('status') == 401:
+#         return response.get('message', 'Unauthorized')
     
-    result_str= f"message: {response['message']}, updated:"
-    for issue in response['updated']:
-        result_str += f" {issue},"
-    return result_str
+#     result_str= f"message: {response['message']}, updated:"
+#     for issue in response['updated']:
+#         result_str += f" {issue},"
+#     return result_str
 
 @mcp.tool()
 async def query(query_term: str, is_key: bool) -> str | None:
