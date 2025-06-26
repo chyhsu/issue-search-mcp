@@ -10,7 +10,7 @@ mcp = FastMCP("issue-search")
 
 # Now import the modules that need mcp
 from .service import make_request, parse_args, server
-from .tool import query, suggest, sync
+from .tool import query, suggest
 
 
-__all__ = ['make_request', 'query', 'suggest', 'sync', 'parse_args', 'mcp', 'server','EMAIL']
+__all__ = ['make_request', 'query', 'suggest', 'parse_args', 'mcp', 'server','EMAIL']
